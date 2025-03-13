@@ -1477,22 +1477,22 @@
 
         templates: {
             escape: function (string, settings) {
-                if (settings.preserveHTML) {
+                if (settings !== undefined && settings.preserveHTML) {
                     return string;
                 }
                 var
-                    badChars     = /["'<>`]/g,
-                    shouldEscape = /["&'<>`]/,
+                    badChars     = /["'<>]/g,
+                    shouldEscape = /["&'<>]/,
                     escape       = {
                         '<': '&lt;',
                         '>': '&gt;',
                         '"': '&quot;',
-                        "'": '&#x27;',
-                        '`': '&#x60;',
+                        "'": '&apos;',
                     },
                     escapedChar  = function (chr) {
                         return escape[chr];
-                    };
+                    }
+                ;
                 if (shouldEscape.test(string)) {
                     string = string.replace(/&(?![\d#a-z]{1,12};)/gi, '&amp;');
                     string = string.replace(badChars, escapedChar);
@@ -1544,7 +1544,7 @@
                                 if (result[fields.image] !== undefined) {
                                     html += ''
                                         + '<div class="image">'
-                                        + ' <img src="' + result[fields.image].replace(/"/g, '') + (result[fields.alt] ? '" alt="' + result[fields.alt].replace(/"/g, '') : '') + '">'
+                                        + ' <img src="' + result[fields.image].replace(/"/g, '') + '"' + (result[fields.alt] ? ' alt="' + result[fields.alt].replace(/"/g, '') + '"' : '') + '>'
                                         + '</div>';
                                 }
                                 html += '<div class="content">';
@@ -1598,7 +1598,7 @@
                         if (result[fields.image] !== undefined) {
                             html += ''
                                 + '<div class="image">'
-                                + ' <img src="' + result[fields.image].replace(/"/g, '') + (result[fields.alt] ? '" alt="' + result[fields.alt].replace(/"/g, '') : '') + '">'
+                                + ' <img src="' + result[fields.image].replace(/"/g, '') + '"' + (result[fields.alt] ? ' alt="' + result[fields.alt].replace(/"/g, '') + '"' : '') + '>'
                                 + '</div>';
                         }
                         html += '<div class="content">';
