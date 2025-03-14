@@ -1515,25 +1515,16 @@
 
         templates: {
             escape: function (string) {
-                var
-                    badChars     = /["'<>]/g,
-                    shouldEscape = /["&'<>]/,
-                    escape       = {
-                        '<': '&lt;',
-                        '>': '&gt;',
-                        '"': '&quot;',
-                        "'": '&apos;',
-                    },
-                    escapedChar  = function (chr) {
-                        return escape[chr];
-                    }
-                ;
-                if (shouldEscape.test(string)) {
-                    string = string.replace(/&(?![\d#a-z]{1,12};)/gi, '&amp;');
-                    string = string.replace(badChars, escapedChar);
-                }
+                const badChars = /["'<>]|&(?![\d#A-Za-z]{1,12};)/g;
+                const escape = {
+                    '"': '&quot;',
+                    '&': '&amp;',
+                    "'": '&apos;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                };
 
-                return string;
+                return string.replace(badChars, (chr) => escape[chr]);
             },
             popup: function (text) {
                 var
