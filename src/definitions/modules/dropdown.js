@@ -3835,25 +3835,19 @@
                     },
                     htmlEntities: function (string, forceAmpersand) {
                         forceAmpersand = typeof forceAmpersand === 'number' ? false : forceAmpersand;
-                        var
-                            badChars     = /["'<>]/g,
-                            shouldEscape = /["&'<>]/,
-                            escape       = {
-                                '<': '&lt;',
-                                '>': '&gt;',
-                                '"': '&quot;',
-                                "'": '&apos;',
-                            },
-                            escapedChar  = function (chr) {
-                                return escape[chr];
-                            }
-                        ;
-                        if (shouldEscape.test(string)) {
-                            string = string.replace(forceAmpersand ? /&/g : /&(?![\d#a-z]{1,12};)/gi, '&amp;');
-                            string = string.replace(badChars, escapedChar);
-                        }
 
-                        return string;
+                        const badChars = forceAmpersand
+                            ? /["&'<>]/g
+                            : /["'<>]|&(?![\d#A-Za-z]{1,12};)/g;
+                        const escape = {
+                            '"': '&quot;',
+                            '&': '&amp;',
+                            "'": '&apos;',
+                            '<': '&lt;',
+                            '>': '&gt;',
+                        };
+
+                        return string.replace(badChars, (chr) => escape[chr]);
                     },
                 },
 
@@ -4263,25 +4257,17 @@
             if (settings !== undefined && settings.preserveHTML) {
                 return string;
             }
-            var
-                badChars     = /["'<>]/g,
-                shouldEscape = /["&'<>]/,
-                escape       = {
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    '"': '&quot;',
-                    "'": '&apos;',
-                },
-                escapedChar  = function (chr) {
-                    return escape[chr];
-                }
-            ;
-            if (shouldEscape.test(string)) {
-                string = string.replace(/&(?![\d#a-z]{1,12};)/gi, '&amp;');
-                string = string.replace(badChars, escapedChar);
-            }
 
-            return string;
+            const badChars = /["'<>]|&(?![\d#A-Za-z]{1,12};)/g;
+            const escape = {
+                '"': '&quot;',
+                '&': '&amp;',
+                "'": '&apos;',
+                '<': '&lt;',
+                '>': '&gt;',
+            };
+
+            return string.replace(badChars, (chr) => escape[chr]);
         },
         // generates dropdown from select values
         dropdown: function (select, settings) {
